@@ -181,7 +181,7 @@ function log_error($message) {
 function json_response($data, $http_code = 200) {
     http_response_code($http_code);
     header('Content-Type: application/json');
-    echo escape_json($data);
+    echo json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     exit;
 }
 

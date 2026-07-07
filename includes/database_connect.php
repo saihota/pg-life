@@ -1,8 +1,24 @@
 <?php
-$conn = mysqli_connect("127.0.0.1", "root", "", "pglife");
+/**
+ * Database Connection with Environment Configuration
+ * Security: No hardcoded credentials - uses .env file
+ */
 
-if (mysqli_connect_errno()) {
-    // Throw error message based on ajax or not
-    echo "Failed to connect to MySQL! Please contact the admin.";
-    return;
+require_once __DIR__ . '/security.php';
+
+// Get connection using environment variables
+$conn = get_db_connection();
+
+// Handle connection failure gracefully
+if (!$conn) {
+    // Only show detailed error if APP_DEBUG is enabled
+    $debug = env('APP_DEBUG', false) === 'true';
+    
+    if ($debug) {
+        error_log("Database connection failed");
+    }
+    
+    // Show generic message to user
+    http_response_code(500);
+    die("Database connection error. Please contact the administrator.");
 }
